@@ -11,15 +11,24 @@ import os
 
 JOKE = "My cat left a dead mouse on my laptop and sat beside it, blinking slowly, waiting for me to sign my own performance review."
 
-def main():
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8") as f:
-        f.write(JOKE + "\n")
+def write_repo_copy(text):
+    """Best-effort mirror to the repo root; ignored when read-only."""
     try:
         with open("entry.txt", "w", encoding="utf-8") as f:
-            f.write(JOKE + "\n")
+            f.write(text)
     except OSError:
         pass
+
+def write_output(text):
+    """Write the entry to the grader output directory first."""
+    os.makedirs("/output", exist_ok=True)
+    with open("/output/entry.txt", "w", encoding="utf-8") as f:
+        f.write(text)
+
+def main():
+    text = JOKE + "\n"
+    write_output(text)
+    write_repo_copy(text)
 
 if __name__ == "__main__":
     main()
